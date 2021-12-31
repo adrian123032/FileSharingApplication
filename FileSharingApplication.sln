@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{AA8EAD21-99EF-4946-ABED-E56D69124122}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{7866479D-5991-4266-990D-15A251F4F47A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7AF7AE0-584D-4B6F-B3DF-423CCF190956} = {A7AF7AE0-584D-4B6F-B3DF-423CCF190956}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{0B5BDAE4-0EC1-4B3C-BCDC-AD8974E30DC2}"
 EndProject
