@@ -55,7 +55,9 @@ namespace Application.Services
                 SenderEmail = box.SenderEmail,
                 Title = box.Title,
                 Message = box.Message,
-                FileUrl = box.FileUrl
+                FileUrl = box.FileUrl,
+                DateCreated = box.DateCreated,
+                DateUpdated = box.DateUpdated
             };
             return result;
         }
@@ -70,7 +72,9 @@ namespace Application.Services
                            SenderEmail = b.SenderEmail,
                            Title = b.Title,
                            Message = b.Message,
-                           FileUrl = b.FileUrl
+                           FileUrl = b.FileUrl,
+                           DateCreated = b.DateCreated,
+                           DateUpdated = b.DateUpdated
                        };
             return list;
         }

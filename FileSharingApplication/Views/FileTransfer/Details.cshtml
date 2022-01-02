@@ -1,0 +1,66 @@
+﻿@model Application.ViewModels.BoxViewModel
+
+@{ ViewData["Title"] = "Details"; }
+
+<h1>Details</h1>
+@if (TempData["Message"] != null)
+{
+<div class="alert alert-success" role="alert">
+    @TempData["Message"]
+</div>}
+
+@if (TempData["Error"] != null)
+{
+<div class="alert alert-danger" role="alert">
+    @TempData["Error"]
+</div>}
+<div>
+    <h4>BlogViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            <span>Target Email</span>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TargetEmail)
+        </dd>
+        <dt class="col-sm-2">
+            <span>Sender Email</span>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SenderEmail)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+
+        <dt class="col-sm-2">
+            <span>File URL</span>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.ActionLink(Model.FileUrl, "Download", new { id = Model.Id })
+
+        </dd>
+
+
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

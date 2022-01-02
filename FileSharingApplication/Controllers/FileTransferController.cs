@@ -28,26 +28,33 @@ namespace FileSharingApplication.Controllers
         public IActionResult Index()
         {
             var list = transferService.GetBoxes();
+            return View(list);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(AddBoxViewModel model, IFormFile logoFile)
+        public IActionResult Create(AddBoxViewModel model, IFormFile File)
         {
-            _logger.Log(LogLevel.Information, $"{User.Identity.Name} is uploading a file called {logoFile.FileName}");
+            
 
             try
             {
+                _logger.Log(LogLevel.Information, $"{User.Identity.Name} is uploading a file called {File.FileName}");
                 if (ModelState.IsValid)
                 {
-                    if (logoFile != null)
+                    if (File != null)
                     {
                        
-                        string newFilename = Guid.NewGuid() + Path.GetExtension(logoFile.FileName);
-                        _logger.Log(LogLevel.Information, $"New filename {newFilename} was generated for the file being uploaded by user {User.Identity.Name}");
+                        string newFilename = Guid.NewGuid() + Path.GetExtension(File.FileName);
+                       _logger.Log(LogLevel.Information, $"New filename {newFilename} was generated for the file being uploaded by user {User.Identity.Name}");
 
                         string absolutePath = hostEnv.WebRootPath + "\\Files";
-                        _logger.Log(LogLevel.Information, $"{User.Identity.Name} is about to start saving file at {absolutePath}");
+                       _logger.Log(LogLevel.Information, $"{User.Identity.Name} is about to start saving file at {absolutePath}");
 
                         string absolutePathWithFilename = absolutePath + "\\" + newFilename;
                         model.FileUrl = "\\Files\\" + newFilename;
@@ -55,7 +62,7 @@ namespace FileSharingApplication.Controllers
 
                         using (FileStream fs = new FileStream(absolutePathWithFilename, FileMode.CreateNew, FileAccess.Write))
                         {
-                            logoFile.CopyTo(fs);
+                            File.CopyTo(fs);
                             fs.Close();
                         }
                         _logger.Log(LogLevel.Information, $"{newFilename} has been saved successfully at {absolutePath}");
@@ -75,11 +82,34 @@ namespace FileSharingApplication.Controllers
             return View();
         }
 
+        public IActionResult Download(int id)
+        {
+            var box = transferService.GetBox(id);
+            using (System.Net.WebClient wc = new System.Net.WebClient()) {
+
+                try
+                {
+                    string absolutePath = hostEnv.WebRootPath + box.FileUrl;
+                    wc.DownloadFile(absolutePath, System.IO.Path.DirectorySeparatorChar + "files" + System.IO.Path.DirectorySeparatorChar + box.FileUrl);
+                    TempData["Message"] = "Downloaded successfully";
+                }
+            
+            catch (Exception ex)
+            {
+                    TempData["Error"] = "Download Unsuccesful: " + ex.Message;
+                }
+        }
+
+            return RedirectToAction("Details", new { id });
+        }
+
         public IActionResult Details(int id)
         {
             var box = transferService.GetBox(id);
+            
             return View(box);
         }
+
 
         public IActionResult Delete(int id)
         {
@@ -115,7 +145,6 @@ namespace FileSharingApplication.Controllers
                 {
                     if (logoFile != null)
                     {
-                        //deleting only if there is a new image uploading
                         System.IO.File.Delete(hostEnv.WebRootPath + originalBox.FileUrl);
 
                         //1. to generate a new unique filename

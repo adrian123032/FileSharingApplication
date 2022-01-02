@@ -84,7 +84,7 @@ namespace FileSharingApplication
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=FileTransfer}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

@@ -12,6 +12,8 @@ namespace Application.ViewModels
         public string Title { get; set; }
         public string Message { get; set; }
         public string FileUrl { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateUpdated { get; set; }
 
     }
 }
