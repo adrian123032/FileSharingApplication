@@ -144,11 +144,11 @@ namespace FileSharingApplication.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
-            var blogToBeEdited = transferService.GetBox(id);
-            return View(blogToBeEdited);
+            var boxToBeEdited = transferService.GetBox(id);
+            return View(boxToBeEdited);
         }
 
-        public IActionResult Update(BoxViewModel model, IFormFile logoFile)
+        public IActionResult Update(BoxViewModel model, IFormFile File)
         {
             try
             {
@@ -156,19 +156,13 @@ namespace FileSharingApplication.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    if (logoFile != null)
+                    if (File != null)
                     {
                         System.IO.File.Delete(hostEnv.WebRootPath + originalBox.FileUrl);
 
-                        //1. to generate a new unique filename
-                        //5389205C-813B-4AFA-A453-B912C30BF933.jpg
-                        string newFilename = Guid.NewGuid() + Path.GetExtension(logoFile.FileName);
 
-                        //2. find what the absolute path to the folder Files is
-                        //C:\Users\attar\Source\Repos\SWD62BEP2021v2\Presentation\Files\5389205C-813B-4AFA-A453-B912C30BF933.jpg
+                        string newFilename = Guid.NewGuid() + Path.GetExtension(File.FileName);
 
-                        //hostEnv.ContentRootPath : C:\Users\attar\Source\Repos\SWD62BEP2021v2\Presentation
-                        //hostEnv.WebRootPath:  C:\Users\attar\Source\Repos\SWD62BEP2021v2\Presentation\wwwroot
 
                         string absolutePath = hostEnv.WebRootPath + "\\Files";
                         string absolutePathWithFilename = absolutePath + "\\" + newFilename;
@@ -177,7 +171,7 @@ namespace FileSharingApplication.Controllers
 
                         using (FileStream fs = new FileStream(absolutePathWithFilename, FileMode.CreateNew, FileAccess.Write))
                         {
-                            logoFile.CopyTo(fs);
+                            File.CopyTo(fs);
                             fs.Close();
                         }
                     }
@@ -187,11 +181,10 @@ namespace FileSharingApplication.Controllers
                     myModel.SenderEmail = model.SenderEmail;
                     myModel.Title = model.Title;
                     myModel.Message = model.Message;
+                    myModel.Password = model.Password;
                     myModel.FileUrl = model.FileUrl;
 
-                   
 
-                    //category is not being updated since i did not include the select in page
 
                     transferService.UpdateBox(myModel, model.Id);
                     ViewBag.Message = "Transfer Box updated successfully";
@@ -202,7 +195,7 @@ namespace FileSharingApplication.Controllers
                 ViewBag.Error = "Transfer Box wasn't updated successfully";
             }
 
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }

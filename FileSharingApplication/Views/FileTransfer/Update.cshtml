@@ -1,0 +1,61 @@
+﻿@model Application.ViewModels.BoxViewModel
+
+@{ ViewData["Title"] = "Update"; }
+
+<h1>Update</h1>
+
+<h4>BoxViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" readonly="readonly" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetEmail" class="control-label">Target Email</label>
+                <input asp-for="TargetEmail" type="email" class="form-control"/>
+                <span asp-validation-for="TargetEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SenderEmail" class="control-label">Sender Email</label>
+                <input asp-for="SenderEmail" type="email" class="form-control"/>
+                <span asp-validation-for="SenderEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control"/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Message" class="control-label"></label>
+                <input asp-for="Message" class="form-control"/>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FileUrl" class="control-label">File Url</label>
+                <input type="file" class="form-control" name="File" />
+                <span asp-validation-for="FileUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
