@@ -9,6 +9,8 @@ using Application.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Text;
+using System.Windows;
 
 namespace FileSharingApplication.Controllers
 {
@@ -81,26 +83,37 @@ namespace FileSharingApplication.Controllers
 
             return View();
         }
-
-        public IActionResult Download(int id)
+        public async Task<IActionResult> Download(int id)
         {
             var box = transferService.GetBox(id);
-            using (System.Net.WebClient wc = new System.Net.WebClient()) {
-
-                try
-                {
-                    string absolutePath = hostEnv.WebRootPath + box.FileUrl;
-                    wc.DownloadFile(absolutePath, System.IO.Path.DirectorySeparatorChar + "files" + System.IO.Path.DirectorySeparatorChar + box.FileUrl);
-                    TempData["Message"] = "Downloaded successfully";
-                }
-            
-            catch (Exception ex)
+            var dpath = hostEnv.WebRootPath + box.FileUrl;
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(dpath, FileMode.Open))
             {
-                    TempData["Error"] = "Download Unsuccesful: " + ex.Message;
-                }
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            var ext = Path.GetExtension(dpath).ToLowerInvariant();
+            return File(memory, GetMimeTypes()[ext], Path.GetFileName(dpath));
         }
 
-            return RedirectToAction("Details", new { id });
+        private Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain" },
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms.excel"},
+                {".xlsx", "application/vnd.openxmlformats-officedocument.speadsheet.sheet"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+               {".gif", "image/gif"},
+               {".csv", "text/csv"}
+
+            };
         }
 
         public IActionResult Details(int id)
