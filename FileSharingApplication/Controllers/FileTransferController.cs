@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Windows;
+using Domain.Models;
 
 namespace FileSharingApplication.Controllers
 {
@@ -19,12 +20,14 @@ namespace FileSharingApplication.Controllers
         private IFileTransferService transferService;
         private IWebHostEnvironment hostEnv;
         private ILogger<FileTransferController> _logger;
+        private readonly IMailService mailService;
 
-        public FileTransferController(IFileTransferService transferService, IWebHostEnvironment hostEnv, ILogger<FileTransferController> logger)
+        public FileTransferController(IFileTransferService transferService, IWebHostEnvironment hostEnv, ILogger<FileTransferController> logger, IMailService mailService)
         {
             this.transferService = transferService;
             this.hostEnv = hostEnv;
             _logger = logger;
+            this.mailService = mailService;
         }
 
         public IActionResult Index()
@@ -197,5 +200,25 @@ namespace FileSharingApplication.Controllers
 
             return RedirectToAction("Index");
         }
+
+        
+        public async Task<IActionResult> Send(int id)
+        {
+            MailRequest request = new MailRequest();
+            try
+            {
+                var details = transferService.GetBox(id);
+                request.ToEmail = details.TargetEmail;
+                request.Subject = "Transfer Box #" + details.Id;
+                request.Body = "Password: " + details.Password;
+                await mailService.SendEmailAsync(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
+
 }

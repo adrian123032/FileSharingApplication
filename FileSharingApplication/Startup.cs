@@ -17,6 +17,7 @@ using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
 using Data.Repositories;
+using Application.Settings;
 
 namespace FileSharingApplication
 {
@@ -32,6 +33,12 @@ namespace FileSharingApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, MailService>();
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
 
             services.AddDbContext<FileTransferContext>(options =>
            options.UseSqlServer(

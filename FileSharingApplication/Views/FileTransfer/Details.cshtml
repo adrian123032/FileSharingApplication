@@ -56,11 +56,11 @@
             @Html.ActionLink(Model.FileUrl, "Download", new { id = Model.Id })
 
         </dd>
-         =
-
+        
     </dl>
 </div>
 <div>
+    @Html.ActionLink("Send Box", "Send", new { id = Model.Id }) |
     @Html.ActionLink("Edit", "Update", new { id = Model.Id }) |
     <a asp-action="Index">Back to List</a>
 </div>
