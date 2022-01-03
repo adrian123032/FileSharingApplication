@@ -200,8 +200,6 @@ namespace FileSharingApplication.Controllers
 
             return RedirectToAction("Index");
         }
-
-        
         public async Task<IActionResult> Send(int id)
         {
             MailRequest request = new MailRequest();
@@ -213,7 +211,7 @@ namespace FileSharingApplication.Controllers
                 request.Body = "Password: " + details.Password;
                 request.Body = "File Url: " + "http://adrian123032-001-site1.itempurl.com/FileTransfer/Details/" + details.Id;
                 await mailService.SendEmailAsync(request);
-                return Ok();
+                return RedirectToAction("Details", new { id = details.Id });
             }
             catch (Exception ex)
             {
