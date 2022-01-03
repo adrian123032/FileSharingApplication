@@ -55,6 +55,7 @@ namespace Application.Services
                 SenderEmail = box.SenderEmail,
                 Title = box.Title,
                 Message = box.Message,
+                Password = box.Password,
                 FileUrl = box.FileUrl,
                 DateCreated = box.DateCreated,
                 DateUpdated = box.DateUpdated
@@ -72,6 +73,7 @@ namespace Application.Services
                            SenderEmail = b.SenderEmail,
                            Title = b.Title,
                            Message = b.Message,
+                           Password = b.Password,
                            FileUrl = b.FileUrl,
                            DateCreated = b.DateCreated,
                            DateUpdated = b.DateUpdated

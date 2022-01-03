@@ -209,8 +209,9 @@ namespace FileSharingApplication.Controllers
             {
                 var details = transferService.GetBox(id);
                 request.ToEmail = details.TargetEmail;
-                request.Subject = "Transfer Box #" + details.Id;
+                request.Subject = "Transfer Box #" + details.Id + " - " + details.SenderEmail;
                 request.Body = "Password: " + details.Password;
+                request.Body = "File Url: " + "http://adrian123032-001-site1.itempurl.com/FileTransfer/Details/" + details.Id;
                 await mailService.SendEmailAsync(request);
                 return Ok();
             }
