@@ -114,7 +114,8 @@ namespace FileSharingApplication.Controllers
                 {".jpg", "image/jpeg"},
                 {".jpeg", "image/jpeg"},
                {".gif", "image/gif"},
-               {".csv", "text/csv"}
+               {".csv", "text/csv"},
+                {".zip", "application/zip"}
 
             };
         }
